@@ -81,9 +81,7 @@ public class C206_CaseStudy {
 			case 3:  //Designer view: Add/View/Delete quotation, View request quotation
 				break;
 				
-				
-				
-			default:
+			case 4:
 				System.out.println("Bye!");
 				option = 4;
 				break;

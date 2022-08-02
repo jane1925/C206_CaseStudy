@@ -6,7 +6,7 @@ public class Package {
 	private String startDate;
 	private String endDate; 
 	private double amount;
-	
+	 
 	
 	public Package(int code, String description, String startDate, String endDate, double amount) {
 		this.code = code;

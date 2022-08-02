@@ -8,7 +8,7 @@ public class C206_CaseStudyTest {
 	private Package p1;
 	private Package p2;
 	private ArrayList<Package> packageList;
-	
+	 
 	private RequestQuotation qq1;
 	private RequestQuotation qq2;
 	private ArrayList<RequestQuotation> requestQuotationList;
