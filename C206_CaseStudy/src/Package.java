@@ -1,7 +1,7 @@
 
 public class Package {
 
-	private int code;
+	private int code; 
 	private String description;
 	private String startDate;
 	private String endDate;
