@@ -4,7 +4,7 @@ public class Package {
 	private int code;
 	private String description;
 	private String startDate;
-	private String endDate;
+	private String endDate; 
 	private double amount;
 	
 	
