@@ -309,6 +309,7 @@ public class C206_CaseStudy {
 	}
 	
 	public static void removePackage(ArrayList<Package> packageList) {
+		viewAllPackage(packageList);
 		int code = Helper.readInt("Enter package code > ");
 		boolean isFound = findPackageCode(packageList, code);
 				
