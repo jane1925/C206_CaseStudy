@@ -2,20 +2,29 @@ import java.util.ArrayList;
 
 public class C206_CaseStudy {
 
+	public static ArrayList<Package> packageList = new ArrayList<Package>();
+	public static ArrayList<RequestQuotation> requestQuotationList = new ArrayList<RequestQuotation>();
+	public static ArrayList<ManageQuotation> manageList = new ArrayList<ManageQuotation>();
+	private static final int OPTION_VIEW = 1;
+	private static final int OPTION_ADD = 2;
+	private static final int OPTION_DELETE = 3;
+	private static final int OPTION_QUIT = 4;
+
+
+	
 	public static void main(String[] args) {
 		
-		ArrayList<Package> packageList = new ArrayList<Package>();
-		packageList.add(new Package(001, "PackageA", "2020-09-04", "2021-01-15", 5000));
-		packageList.add(new Package(002, "PackageB", "2021-04-16", "2021-10-23", 6540));
+		packageList.add(new Package(001, "PackageA", "2020-09-04", "2021-01-15", 5000.20));
+		packageList.add(new Package(002, "PackageB", "2021-04-16", "2021-10-23", 6540.90));
 		
-		ArrayList<RequestQuotation> requestQuotationList = new ArrayList<RequestQuotation>();
 		requestQuotationList.add(new RequestQuotation("HDB", 170, "Lee Jackson", 87500650, "kokpop1090@gmail.com", 50000, "10-8-2022", "kitches", 1, 0, null, null));
 		requestQuotationList.add(new RequestQuotation("HDB", 170, "KOKPOP", 87500650, "cbbawe1090@gmail.com", 100000, "20-8-2022", "toilet", 0, 1, null, null));
-
-
+		
+		manageList.add(new ManageQuotation(1234, 8765, "Kitchen", "tiles", "Heisenburg", "9-8-2022", 500000));
+		
 		int option = 0;
 
-		while (option != 4) {
+		while (option != OPTION_QUIT) {
 
 			C206_CaseStudy.menu();
 			option = Helper.readInt("Enter an option > ");
@@ -44,47 +53,31 @@ public class C206_CaseStudy {
 				switch (adminOption) {
 				
 				case 1:  //Manage Package
-					adminPackageMenu();
-					int adminPackageOption = Helper.readInt("Enter an option > ");
-					
-					switch (adminPackageOption) {
-					case 1: //View package
-						C206_CaseStudy.viewAllPackage(packageList);
-						break;
-					case 2: //Add package
-						Package userp = inputPackage();
-						C206_CaseStudy.addPackage(packageList, userp);
-						System.out.println("Package added");
-						break;
-					case 3: //Delete Package
-						
-					}
+					adminPackageOption();					
 					break;
+					
 				case 2:  //Manage Appointment
 					break;
 				
 				case 3:  //Manage Quotation Requests
-					adminReqQuotMenu();
-					int adminReqQuoOption = Helper.readInt("Enter an option > ");
-					
-					switch (adminReqQuoOption) {
-					case 1: //View Quotation request
-						C206_CaseStudy.retrieveAllRequestQuotation(requestQuotationList);
-					case 2: //Delete Quotation request
-					}
+					adminReqQuoOption();
 					break;
 					
 				}//end of adminOption
 				break;
 
-				 
 			case 3:  //Designer view: Add/View/Delete quotation, View request quotation
+				designQuoOption();
 				break;
 				
-			case 4:
+			case OPTION_QUIT:
 				System.out.println("Bye!");
 				option = 4;
 				break;
+				
+			default:
+				System.out.println("Invalid input");
+				break;		
 			}
 		}//end of while loop
 		
@@ -92,7 +85,7 @@ public class C206_CaseStudy {
 	
 	
 	public static void menu() {
-		C206_CaseStudy.setHeader("Renovation ACE Website");
+		setHeader("Renovation ACE Website");
 		System.out.println("1. Enter as a Customer");
 		System.out.println("2. Enter as an Admin");
 		System.out.println("3. Enter as an Designer");
@@ -100,17 +93,35 @@ public class C206_CaseStudy {
 		Helper.line(80, "-");
 	}
 	
+	public static void customerMenu() {
+		setHeader("Customer");
+		System.out.println("1. Request For Quotation");
+		System.out.println("2. Make Appointment");
+		System.out.println("3. Quit");
+		Helper.line(80, "-");
+	}
+
 	public static void adminMenu() {
-		C206_CaseStudy.setHeader("Admin");
+		setHeader("Admin");
 		System.out.println("1. Manage Package");
 		System.out.println("2. Manage Appointment");
 		System.out.println("3. Manage Quotation Requests");
 		System.out.println("4. Quit");
 		Helper.line(80, "-");
 	}
+	
+	public static void designerMenu() {
+		setHeader("Designer");
+		System.out.println("1. View Quotation");
+		System.out.println("2. Add Quotation");
+		System.out.println("3. Delete Quotation");
+		System.out.println("4. View Quotation Requests");
+		System.out.println("5. Quit");
+		Helper.line(80, "-");
+	}
 
 	public static void adminPackageMenu() {
-		C206_CaseStudy.setHeader("Manage Package");
+		setHeader("Manage Package");
 		System.out.println("1. View Package");
 		System.out.println("2. Add Package");
 		System.out.println("3. Delete Package");
@@ -119,7 +130,7 @@ public class C206_CaseStudy {
 	}
 	
 	public static void adminReqQuotMenu() {
-		C206_CaseStudy.setHeader("Manage Quotation Requests");
+		setHeader("Manage Quotation Requests");
 		System.out.println("1. View quotation request");
 		System.out.println("2. Delete quotation request");
 		System.out.println("3. Quit");
@@ -127,28 +138,110 @@ public class C206_CaseStudy {
 	}
 
 	
-	public static void customerMenu() {
-		C206_CaseStudy.setHeader("Customer");
-		System.out.println("1. Request For Quotation");
-		System.out.println("2. Make Appointment");
-		System.out.println("3. Quit");
-		Helper.line(80, "-");
+	public static void adminPackageOption(){
+		adminPackageMenu();
+		int adminPackageOption = Helper.readInt("Enter an option > ");
+
+		switch (adminPackageOption) {
+		case OPTION_VIEW:
+			viewAllPackage(packageList);
+			break;
+		case OPTION_ADD:
+			Package userp = inputPackage();
+			addPackage(packageList, userp);
+			System.out.println("Package added");
+			break;
+		case OPTION_DELETE:
+			removePackage(packageList);
+			break;
+		default:
+			System.out.println("Invalid input");
+		}
+	}
+	
+	public static void adminReqQuoOption(){
+		adminReqQuotMenu();
+		int adminReqQuoOption = Helper.readInt("Enter an option > ");		
+
+		switch (adminReqQuoOption) {
+		case OPTION_VIEW:
+			viewAllRequestQuotation(requestQuotationList);
+			break;
+		case 2: //Delete Quotation request
+			removeRequestQuotation(requestQuotationList);
+			break;
+		case 3:
+			break;
+		default:
+			System.out.println("Invalid input");
+			break;
+		}
 	}
 
+	public static void designQuoOption(){
+		designerMenu();
+		int desigOption = Helper.readInt("Enter an option > ");		
+
+		switch (desigOption) {
+		case OPTION_VIEW:
+			viewAllManageQuotation(manageList);
+			break;
+		case OPTION_ADD:
+			ManageQuotation userq = inputManageQuotation();
+			addManageQuotation(manageList, userq);
+			System.out.println("Quotation added");
+			break;
+		case OPTION_DELETE:
+			removeManageQuotation(manageList);
+			break;
+		case 4:
+			viewAllRequestQuotation(requestQuotationList);
+			break;
+		case 5:
+			break;
+		default:
+			System.out.println("Invalid input");
+			break;
+		}
+	}
+
+	
 	public static void setHeader(String header) {
 		Helper.line(80, "-");
 		System.out.println(header);
 		Helper.line(80, "-");
 	}
+		
 	
+	//================================= Manage Package (Jane)  =================================
+	
+	public static boolean findPackageCode(ArrayList<Package> packageList, int x) {
+		boolean isExist = false;
+		
+		for(Package i : packageList) {
+			if (x == i.getCode()) {
+				isExist = true;
+			}
+		}
+		return isExist;
+	}
+
 	public static Package inputPackage() {
 		int code = Helper.readInt("Enter package code > ");
+		boolean isFound = findPackageCode(packageList, code);
+		
+		while(isFound == true) {
+				System.out.println("Package code already exists!");
+				code = Helper.readInt("Enter package code > ");
+				isFound = findPackageCode(packageList, code);
+		}
+
 		String description = Helper.readString("Enter description > ");
 		String startDate = Helper.readString("Enter start date in format (yyyy-mm-dd) > ");
 		String endDate = Helper.readString("Enter end date in format (yyyy-mm-dd) > ");
 		double amount = Helper.readDouble("Enter amount > ");
-
-		Package p= new Package(code, description, startDate, endDate, amount);
+		
+		Package p = new Package(code, description, startDate, endDate, amount);
 		return p;	
 	}
 	
@@ -161,38 +254,20 @@ public class C206_CaseStudy {
 
 		for (int i = 0; i < packageList.size(); i++) {
 
-			output += String.format("%-10d %-30s %-15s %-15s %-10.2f\n", packageList.get(i).getCode(),
-					packageList.get(i).getDescription(), (packageList.get(i).getStartDate()),
-					packageList.get(i).getEndDate(),packageList.get(i).getAmount());
+			output += String.format("%-74s", packageList.get(i).toString());	
 		}
 		return output;
 	}
 	
 	public static void viewAllPackage(ArrayList<Package> packageList) {
 		C206_CaseStudy.setHeader("PACKAGE LIST");
-		String output = String.format("%-10s %-30s %-15s %-15s %-10s\n", "CODE", "DESCRIPTION",
+		String output = String.format("%-10s %-20s %-15s %-15s %-10s\n", "CODE", "DESCRIPTION",
 				"START DATE", "END DATE","AMOUNT");
 		 output += retrieveAllPackage(packageList);	
 		System.out.println(output);
 	}
-	
-	public static int inputDelPackage() {
-		int code = Helper.readInt("Enter package code > ");
-		return code;	
-	}
-	
-//	public static boolean verifyPackage(ArrayList<Package> packageList, int x) {
-//		boolean isExist = true;
-//		
-//		for(Package i : packageList) {
-//			if (x == i.getCode()) {
-//				isExist = true;
-//			}
-//		}
-//		return isExist;
-//	}
 
-	public static void removePackage(ArrayList<Package> packageList, int x) {
+	public static void doRemovePackage(ArrayList<Package> packageList, int x) {
 		for(Package i : packageList) {
 			if (x == i.getCode()) {
 				packageList.remove(i);
@@ -200,7 +275,27 @@ public class C206_CaseStudy {
 		}
 	}
 	
+	public static void removePackage(ArrayList<Package> packageList) {
+		int code = Helper.readInt("Enter package code > ");
+		boolean isFound = findPackageCode(packageList, code);
+				
+		while(isFound == false) {
+			System.out.println("Package doesn't exist!");
+			code = Helper.readInt("Enter package code > ");
+			isFound = findPackageCode(packageList, code);
+		}
+		doRemovePackage(packageList, code);					
+		System.out.println("Package deleted");
+	}
+	
+	
+	
+	
+
+	//================================= Manage Requests Quotation (Jackson)  =================================
+		
 	public static RequestQuotation inputRequestQuotation() {
+
 		String propertyType = Helper.readString("Enter Property type > ");
 		Double areaSize = Helper.readDouble("Enter Area size > ");
 		String name = Helper.readString("Enter requestor name > ");
@@ -227,23 +322,118 @@ public class C206_CaseStudy {
 
 		for (int i = 0; i < requestQuotationList.size(); i++) {
 
-			output += String.format("%-10s %-10.2f %-10s %-10d %-20s %-10.2f %-10s %-10s %-10d %-10d %-10s %-10s\n", requestQuotationList.get(i).getPropertyType(),
-					requestQuotationList.get(i).getAreaSize(), requestQuotationList.get(i).getRequestorName(), 
-					requestQuotationList.get(i).getContactNumber(), requestQuotationList.get(i).getEmail() , 
-					requestQuotationList.get(i).getBudget(),requestQuotationList.get(i).getCompletionDate() ,
-					requestQuotationList.get(i).getRenovationType()	, requestQuotationList.get(i).getNumOfRoom(), 
-					requestQuotationList.get(i).getNumOfToilet() , requestQuotationList.get(i).getRenovationStyle() , 
-					requestQuotationList.get(i).getUrgentReq());					
+			output += String.format("%-207s", requestQuotationList.get(i).toString());					
 		}
 		return output;
 	}
 
 	public static void viewAllRequestQuotation(ArrayList<RequestQuotation> requestQuotationList) {
 		C206_CaseStudy.setHeader("REQUEST FOR QUOTATION LIST");
-		String output = String.format("%-10s %-10s %-10s %-10s %-20s %-10s %-10s %-10s %-10s %-10s %-10s %-10s\n", "PROPERTY TYPE", "AREA SIZE",
-				"REQUESTOR NAME", "CONTACT NUMBER","EMAIL", "BUDGET", "TARGET COMPLETION DATE","RENOVATION TYPE","NUMBER OF ROOMS TO RENOVATE","NUMBER OF TOILETS TO RENOVATE","RENOVATION STYLE","URGENT REQUST");
+		String output = String.format("%-15s %-10s %-20s %-20s %-25s %-10s %-25s %-20s %-20s %-20s %-20s %-20s\n", "PROPERTY TYPE", "AREA SIZE",
+				"REQUESTOR NAME", "CONTACT NUMBER","EMAIL", "BUDGET", "TARGET COMPLETION DATE","RENOVATION TYPE","NUMBER OF ROOMS","NUMBER OF TOILETS","RENOVATION STYLE","URGENT REQUST");
 		 output += retrieveAllRequestQuotation(requestQuotationList);	
 		System.out.println(output);
 	}
+	
+	public static boolean findRequestorName(ArrayList<RequestQuotation> requestQuotationList, String x) {
+		boolean isExist = false;
+		
+		for(RequestQuotation i : requestQuotationList) {
+			if (x.equalsIgnoreCase(i.getRequestorName())) {
+				isExist = true;
+			}
+		}
+		return isExist;
+	}
+
+	public static void doRemoveRequestQuotation(ArrayList<RequestQuotation> requestQuotationList, String x) {
+		for(RequestQuotation i : requestQuotationList) {
+			if (x.equalsIgnoreCase(i.getRequestorName())) {
+				requestQuotationList.remove(i);
+			}
+		}
+	}
+
+	public static void removeRequestQuotation(ArrayList<RequestQuotation> requestQuotationList) {
+		String name = Helper.readString("Enter requestor name > ");
+		boolean verify = findRequestorName(requestQuotationList, name);
+
+		if(verify == true) {
+			doRemoveRequestQuotation(requestQuotationList, name);					
+			System.out.println("Request for quotation deleted");
+		}else {
+			System.out.println("Invalid requestor name");
+		}
+	}
+	
+    //================================= Manage Quotation (Shamir) =================================
+    public static String retrieveAllManageQuotation(ArrayList<ManageQuotation> ManageQuotationList) {
+        String output = "";
+
+        for (int i = 0; i < ManageQuotationList.size(); i++) {
+            output += String.format("%-103s", ManageQuotationList.get(i).toString());
+        }
+        return output;
+    }
+
+    public static void viewAllManageQuotation(ArrayList<ManageQuotation> ManageQuotationList) {
+        C206_CaseStudy.setHeader("Quotation");
+        String output = String.format("%-15s%-15s%-13s%-20s%-15s%-15s%-10s\n","REQUEST ID","QUOTATION ID","CATEGORY","ITEMS IN CATEGORY","DESIGNER","START DATE","TOTAL AMOUNT");
+
+        output += retrieveAllManageQuotation(ManageQuotationList);
+        System.out.println(output);
+
+    }
+
+    public static ManageQuotation inputManageQuotation() {
+        int RID = Helper.readInt("Enter your Request ID > ");
+        int QID = Helper.readInt("Enter your quotation ID > "); 
+        String Category = Helper.readString("Enter your category(Room, Kitchen, Etc.) > ");
+        String CategoryItem = Helper.readString("Enter the items for category > ");
+        String DesignerName = Helper.readString("Enter the name of the designer > ");
+        String Date = Helper.readString("Enter the start date > ");
+        int amount = Helper.readInt("Enter the total quotation amount > ");
+
+        ManageQuotation MQ = new ManageQuotation(RID, QID, Category, CategoryItem, DesignerName, Date, amount);
+        return MQ;
+    }
+
+
+    public static void addManageQuotation(ArrayList<ManageQuotation> ManageQuotationList, ManageQuotation MQ) {
+        ManageQuotationList.add(MQ);
+    }
+
+    
+    public static boolean findManageQuotation(ArrayList<ManageQuotation> ManageQuotationList, int ID) {
+        boolean found = false;
+        for (int i=0 ; i<ManageQuotationList.size() ; i++) {
+            if (ID == ManageQuotationList.get(i).getQuotationID()) {
+                found = true;
+            }
+        }
+        return found;
+    }
+    
+	public static void doRemoveManageQuotation(ArrayList<ManageQuotation> ManageQuotationList, int ID) {
+        for (int i=0 ; i<ManageQuotationList.size() ; i++) {
+            if (ID == ManageQuotationList.get(i).getQuotationID()) {
+            	ManageQuotationList.remove(i);
+            }
+        }
+	}
+
+    public static void removeManageQuotation(ArrayList<ManageQuotation> ManageQuotationList) {
+        retrieveAllManageQuotation(ManageQuotationList);
+        int ID = Helper.readInt("Enter your quotation ID > "); 
+
+        boolean found = findManageQuotation(ManageQuotationList, ID);
+
+        if (found == false) {
+            System.out.println("invalid ID number");
+        } else {
+        	doRemoveManageQuotation(ManageQuotationList, ID);
+            System.out.println("quotation ID: " + ID + " successfully deleted!");
+        }
+    }
 
 }//end of class

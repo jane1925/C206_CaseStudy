@@ -41,5 +41,14 @@ public class Package {
 		return amount;
 	}
 	
-		
+	public String toString(){
+		String output = String.format("%-10d %-20s %-15s %-15s %-10.1f\n", 
+				code,
+				description,
+				startDate,
+				endDate,
+				amount);
+		return output;
+	}
+			
 }//end of class

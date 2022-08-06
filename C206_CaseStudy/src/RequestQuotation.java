@@ -1,5 +1,3 @@
-import java.time.LocalDate;
-import java.util.Date;
 
 public class RequestQuotation {
 	private String propertyType; 
@@ -98,9 +96,21 @@ public class RequestQuotation {
 		return numOfToilet;
 	}
 	
-	
-	
-	
-	
+	public String toString(){
+		String output = String.format("%-15s %-10.1f %-20s %-20d %-25s %-10.1f %-25s %-20s %-20d %-20d %-20s %-20s\n", 
+				propertyType,
+				areaSize,
+				requestorName,
+				contactNumber,
+				email,
+				budget,
+				completionDate,
+				renovationType,
+				numOfRoom,
+				numOfToilet,
+				renovationStyle,
+				urgentReq);
+		return output;
+	}
 
 }
