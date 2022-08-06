@@ -5,13 +5,12 @@ public class C206_CaseStudy {
 	public static ArrayList<Package> packageList = new ArrayList<Package>();
 	public static ArrayList<RequestQuotation> requestQuotationList = new ArrayList<RequestQuotation>();
 	public static ArrayList<ManageQuotation> manageList = new ArrayList<ManageQuotation>();
+	public static ArrayList<RequestAppointment> AppointmentList = new ArrayList<RequestAppointment>();
 	private static final int OPTION_VIEW = 1;
 	private static final int OPTION_ADD = 2;
 	private static final int OPTION_DELETE = 3;
 	private static final int OPTION_QUIT = 4;
 
-
-	
 	public static void main(String[] args) {
 		
 		packageList.add(new Package(001, "PackageA", "2020-09-04", "2021-01-15", 5000.20));
@@ -21,6 +20,10 @@ public class C206_CaseStudy {
 		requestQuotationList.add(new RequestQuotation("HDB", 170, "KOKPOP", 87500650, "cbbawe1090@gmail.com", 100000, "20-8-2022", "toilet", 0, 1, null, null));
 		
 		manageList.add(new ManageQuotation(1234, 8765, "Kitchen", "tiles", "Heisenburg", "9-8-2022", 500000));
+		
+		AppointmentList.add(new RequestAppointment("Arya",88888888,"ar19@gmail.com","19-10-1999","10:30","Amberd","Admirality",""));
+		AppointmentList.add(new RequestAppointment("John",66666666,"jh@gmail.com","10-10-1999","4:30","Heard","Canberra",""));
+
 		
 		int option = 0;
 
@@ -137,7 +140,15 @@ public class C206_CaseStudy {
 		Helper.line(80, "-");
 	}
 
-	
+	public static void adminAppointMenu() {
+		setHeader("Manage Appointment");
+		System.out.println("1. View appointment");
+		System.out.println("2. Make appointment");
+		System.out.println("3. Delete appointment");
+		System.out.println("4. Quit");
+		Helper.line(80, "-");
+	}
+
 	public static void adminPackageOption(){
 		adminPackageMenu();
 		int adminPackageOption = Helper.readInt("Enter an option > ");
@@ -177,6 +188,28 @@ public class C206_CaseStudy {
 			break;
 		}
 	}
+	
+	public static void adminAppointOption(){
+		adminAppointMenu();
+		int adminAppointOption = Helper.readInt("Enter an option > ");
+
+		switch (adminAppointOption) {
+		case OPTION_VIEW:
+			viewAllPackage(packageList);
+			break;
+		case OPTION_ADD:
+			Package userp = inputPackage();
+			addPackage(packageList, userp);
+			System.out.println("Package added");
+			break;
+		case OPTION_DELETE:
+			removePackage(packageList);
+			break;
+		default:
+			System.out.println("Invalid input");
+		}
+	}
+
 
 	public static void designQuoOption(){
 		designerMenu();
@@ -436,4 +469,79 @@ public class C206_CaseStudy {
         }
     }
 
+    
+    //================================= Manage Appointment (Arya) =================================
+
+	public static RequestAppointment inputManageAppointments() {
+    	String requestorName = Helper.readString("Enter requestor name > ");
+    	int contactNumber = Helper.readInt("Enter contact number > ");
+    	String email = Helper.readString("Enter email > ");
+    	String appointmentDate = Helper.readString("Enter appointment Date > ");
+    	String appointmentTime = Helper.readString("Enter Appointment time > ");
+    	String designerName = Helper.readString("Enter designer name > ");
+    	String premiseAddress = Helper.readString("Enter premise address > ");
+    	
+    	
+    	RequestAppointment aa = new RequestAppointment(requestorName,contactNumber,email,appointmentDate,appointmentTime,appointmentDate,designerName,premiseAddress);
+		return aa;
+    }
+	
+    public static void addManagementAppointments(ArrayList<RequestAppointment> managementList, RequestAppointment aa) {
+		managementList.add(aa);
+	}
+
+    public static String retrieveAllAppointments(ArrayList<RequestAppointment> AppointmentList) {
+    	String output = "";
+    	for(int i=0;i<AppointmentList.size();i++) {
+    		output += String.format("%-14s %-20s %-20s %-20s %-17s %-15s %-20s\n", 
+    				AppointmentList.get(i).getRequestorName(),AppointmentList.get(i).getContactNumber(),
+    				AppointmentList.get(i).getEmail(),AppointmentList.get(i).getAppointmentDate()
+    				,AppointmentList.get(i).getAppointmentTime(),AppointmentList.get(i).getDesignerName(),AppointmentList.get(i).getPremiseAddress());
+    	}
+    	return output;
+    }
+    
+    public static void viewAllAppointments(ArrayList<RequestAppointment> AppointmentList) {
+    	C206_CaseStudy.setHeader("APPOINTMENT LIST");
+    	String output = String.format("%-10s %-20s %-20s %-20s %-10s %-16s %-10s \n","REQUESTOR NAME","CONTACT NUMBER",
+    			"E-mail","APPOINTMENT DATE","APPOINTMENT NAME","DESIGNER NAME","PREMISE ADDRESS");
+    	output += retrieveAllAppointments(AppointmentList);
+    	System.out.println(output);
+    }
+
+    public static  void deleteAppointments(ArrayList<RequestAppointment> appointmentList, String x) {
+		
+		for (int i = 0; i < appointmentList.size(); i++) {
+			if (x.matches(appointmentList.get(i).getRequestorName() )) {
+				appointmentList.remove(i);
+			}
+		}	
+	}
+    
+	public static String inputDeleteAppointments() {	
+		String x = Helper.readString("Please enter requestor name > ");
+			return x;
+	}
+			
+		
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }//end of class

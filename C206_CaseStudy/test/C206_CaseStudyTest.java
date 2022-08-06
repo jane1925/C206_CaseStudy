@@ -7,15 +7,18 @@ import org.junit.Test;
 public class C206_CaseStudyTest { 
 	private Package p1;
 	private Package p2;
-	private static ArrayList<Package> packageList;
+	private ArrayList<Package> packageList;
 	 
 	private RequestQuotation qq1;
 	private RequestQuotation qq2;
-	private static ArrayList<RequestQuotation> requestQuotationList;
+	private ArrayList<RequestQuotation> requestQuotationList;
 
 	private ManageQuotation Q;
-	private static ArrayList<ManageQuotation> manageList;
+	private ArrayList<ManageQuotation> manageList;
 
+	private RequestAppointment aa1;
+	private RequestAppointment aa2;
+	private ArrayList<RequestAppointment>appointmentList;
 	
 	public C206_CaseStudyTest() {
 		super();
@@ -33,12 +36,17 @@ public class C206_CaseStudyTest {
 		
 		Q = new ManageQuotation(1234, 8765, "Kitchen", "tiles", "Heisenburg", "9-8-2022", 500000);
 		manageList = new ArrayList<ManageQuotation>();
+		
+		aa1 = new RequestAppointment("Arya",88888888,"ar19@gmail.com","19-10-1999","10:30","Amberd","Admirality","");
+		aa2 = new RequestAppointment("John",66666666,"jh@gmail.com","10-10-1999","4:30","Heard","Canberra","");
+		appointmentList = new ArrayList<RequestAppointment>();
+
 	}
 
 	
 	
 	
-    //================================= Manage Quotation (Jane) =================================
+    //================================= Manage Package (Jane) =================================
 
 	@Test
 	public void testRetrieveAllPackage() {
@@ -101,7 +109,7 @@ public class C206_CaseStudyTest {
 
 	
 	
-    //================================= Manage Quotation (Jackson) =================================
+    //================================= Manage Request Quotation (Jackson) =================================
 
 	@Test
 	public void testAddRequestQuotation() {
@@ -220,6 +228,71 @@ public class C206_CaseStudyTest {
 		found = C206_CaseStudy.findManageQuotation(manageList, Q.getRequestID());
 		assertFalse("Check if a non-existent user is found", found);
 	}
+	
+	
+	   //================================= Manage Appointment (Arya) =================================
+
+	@Test
+    public void testRetrieveAllAppointments() {
+        // Test if Item list is not null but empty -boundary
+        assertNotNull("Test if there is valid Appointment arraylist to retrieve item", appointmentList);
+
+        //test if the list retrieved from the SourceCentre is empty - boundary
+        String allAppointment= C206_CaseStudy.retrieveAllAppointments(appointmentList);
+        String testOutput = "";
+        assertEquals("Check that ViewAllAppointmentlist", testOutput, allAppointment);
+
+        //Given an empty list, after adding 2 items, test if the size of the list is 2 - normal
+        C206_CaseStudy.addManagementAppointments(appointmentList, aa1);
+        C206_CaseStudy.addManagementAppointments(appointmentList, aa2);
+        assertEquals("Test that Appointment arraylist size is 2", 2, appointmentList.size());
+
+        //test if the expected output string same as the list retrieved from the SourceCentre  
+        allAppointment= C206_CaseStudy.retrieveAllAppointments(appointmentList);
+        testOutput = String.format("%-14s %-20s %-20s %-20s %-17s %-15s %-20s\n",aa1.getRequestorName(),aa1.getContactNumber(),aa1.getEmail(),aa1.getAppointmentDate(),aa1.getAppointmentTime(),aa1.getDesignerName(),aa1.getPremiseAddress());
+        testOutput += String.format("%-14s %-20s %-20s %-20s %-17s %-15s %-20s\n",aa2.getRequestorName(),aa2.getContactNumber(),aa2.getEmail(),aa2.getAppointmentDate(),aa2.getAppointmentTime(),aa2.getDesignerName(),aa2.getPremiseAddress());
+        assertEquals("Test that ViewAllAppointmentlist", testOutput, allAppointment);
+
+    }
+	@Test
+	public void testAddAppointment() {
+		
+		// write your code here 
+        assertNotNull("Test if there is valid appointment arraylist to add to", appointmentList);
+		
+		//Given an empty list, after adding 1 item, the size of the list is 1
+        C206_CaseStudy.addManagementAppointments(appointmentList, aa1);		
+		assertEquals("Test if that Appointment arraylist size is 1?", 1, appointmentList.size());
+		
+		//The item just added is as same as the first item of the list
+		assertSame("Test that Appointment is added same as 1st item of the list?", aa1, appointmentList.get(0));
+		
+		//Add another item. test The size of the list is 2?
+		C206_CaseStudy.addManagementAppointments(appointmentList, aa2);
+		assertEquals("Test that Appointment arraylist size is 2?", 2, appointmentList.size());
+		assertSame("Test that Appointment is added same as 2nd item of the list?", aa2, appointmentList.get(1));
+	}
+	
+	@Test
+    public void testDeleteAppointments() {
+        // Test if Item list is not null but empty -boundary
+        assertNotNull("Test if there is valid Quotation arraylist to delete item", appointmentList);
+
+        //test if the list retrieved from the SourceCentre is empty - boundary
+        String allAppointment= C206_CaseStudy.retrieveAllAppointments(appointmentList);
+        String testOutput = "";
+        assertEquals("Check that ViewAllAppointmentlist", testOutput, allAppointment);
+
+        //Given an empty list, after adding 2 items, test if the size of the list is 2 - normal
+        C206_CaseStudy.addManagementAppointments(appointmentList, aa1);
+        C206_CaseStudy.addManagementAppointments(appointmentList, aa2);
+        assertEquals("Test that Appointment arraylist size is 2", 2, appointmentList.size());
+        
+        C206_CaseStudy.deleteAppointments(appointmentList,"Arya");
+        assertEquals("Test that Appointment arraylist size is 1", 1, appointmentList.size());
+        
+        
+	}
 
 	
 	@After
@@ -234,6 +307,10 @@ public class C206_CaseStudyTest {
 		
 		Q = null;
 		manageList = null;
+		
+		aa1 = null;
+		aa2 = null;
+		appointmentList = null;
 	}
 
 
