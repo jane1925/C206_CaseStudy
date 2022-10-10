@@ -45,6 +45,8 @@ public class C206_CaseStudy {
 					System.out.println("Quotation Requested");
 					break;
 				case 2: // Make appointment
+					adminAppointMenu();
+					break;
 				}
 				break;
 				
@@ -195,11 +197,11 @@ public class C206_CaseStudy {
 
 		switch (adminAppointOption) {
 		case OPTION_VIEW:
-			viewAllPackage(packageList);
+			retrieveAllAppointments(AppointmentList);
 			break;
 		case OPTION_ADD:
-			Package userp = inputPackage();
-			addPackage(packageList, userp);
+			RequestAppointment userp = inputManageAppointments();
+			addPackage(AppointmentList, userp);
 			System.out.println("Package added");
 			break;
 		case OPTION_DELETE:
